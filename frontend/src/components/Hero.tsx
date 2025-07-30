@@ -77,24 +77,18 @@ const Hero = () => {
                 Watch Vision Video
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-4xl w-full max-h-[80vh] p-0">
-              <div className="relative aspect-video w-full bg-black rounded-lg overflow-hidden">
-                <video 
-                  className="w-full h-full object-cover"
-                  controls
-                  autoPlay
-                  preload="metadata"
-                >
-                  <source src="/Vision-video.mp4" type="video/mp4" />
-                  <p className="text-white p-4">
-                    Your browser doesn't support video playback. 
-                    <a href="/Vision-video.mp4" className="text-primary underline ml-1">
-                      Download the video
-                    </a>
-                  </p>
-                </video>
-              </div>
-            </DialogContent>
+<DialogContent className="max-w-4xl w-full max-h-[80vh] p-0">
+  <div className="relative aspect-video w-full bg-black rounded-lg overflow-hidden">
+    <iframe
+      src="https://drive.google.com/file/d/1hFUBL1Q29FayYoPd8hRnbUZ1wQTex2cj/preview"
+      width="100%"
+      height="100%"
+      allow="autoplay"
+      className="rounded-xl w-full h-full"
+      allowFullScreen
+    ></iframe>
+  </div>
+</DialogContent>
           </Dialog>
         </div>
 
