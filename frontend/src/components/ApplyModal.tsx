@@ -46,9 +46,7 @@ export default function ApplyModal({ open, onClose, positionTitle }: ApplyModalP
       form.append("position", positionTitle);
       if (formData.resume) form.append("resume", formData.resume);
 
-      const res = await fetch("${import.meta.env.VITE_API_BASE_URL}
-/api/apply"
-, {
+      const res = await fetch("${import.meta.env.VITE_API_BASE_URL}/api/apply", {
         method: "POST",
         body: form,
       });
