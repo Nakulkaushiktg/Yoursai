@@ -48,7 +48,7 @@ const ScheduleDemo = () => {
     setIsSubmitting(true);
 
     try {
-      const res = await fetch("${import.meta.env.VITE_API_BASE_URL}/api/demo", {
+      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/demo`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
