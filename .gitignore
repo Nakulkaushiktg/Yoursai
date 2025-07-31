@@ -3,3 +3,6 @@ backend/.env
 *.env.local
 backend/.env
 frontend/public/Vision-video.mp4
+"backend/.env" 
+".env" 
+"frontend/public/Vision-video.mp4" 
