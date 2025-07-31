@@ -33,8 +33,7 @@ const handlePayment = async () => {
     console.log("🔑 User email:", user.email);
 
     // ✅ FIXED: Only send email and amount (in rupees if backend multiplies)
-    const res = await fetch("${import.meta.env.VITE_API_BASE_URL}
-/api/payment/create-order", {
+    const res = await fetch("${import.meta.env.VITE_API_BASE_URL}/api/payment/create-order", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
