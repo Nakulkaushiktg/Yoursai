@@ -36,11 +36,8 @@ const transporter = nodemailer.createTransport({
 });
 
 // -------------------- MIDDLEWARE --------------------
-origin: [
-  "http://localhost:8080",
-  "http://127.0.0.1:8080",
-  "http://192.168.5.32:8080"
-],
+app.use(cors({
+  origin: ["http://localhost:8080", "http://127.0.0.1:8080", "http://192.168.5.32:8080"],
   credentials: true,
 }));
 app.use(express.json());
