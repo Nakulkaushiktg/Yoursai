@@ -60,7 +60,7 @@ const API_BASE = import.meta.env.VITE_API_BASE_URL;
       }
 
       try {
-        const res = await fetch(`${API_BASE}/api/auth/user`, {
+        const res = await fetch(`https://yoursai-5.onrender.com/api/auth/user`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -92,7 +92,7 @@ const API_BASE = import.meta.env.VITE_API_BASE_URL;
     try {
       setLoading(true);
 
-      const res = await fetch(`${API_BASE}/login`, {
+      const res = await fetch(`https://yoursai-5.onrender.com/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -106,7 +106,7 @@ const API_BASE = import.meta.env.VITE_API_BASE_URL;
       localStorage.setItem("token", data.token);
 
       // ✅ Fetch user info using token
-      const userRes = await fetch(`${API_BASE}/api/auth/user`, {
+      const userRes = await fetch(`https://yoursai-5.onrender.com/api/auth/user`, {
         headers: {
           Authorization: `Bearer ${data.token}`,
         },
@@ -147,7 +147,7 @@ const API_BASE = import.meta.env.VITE_API_BASE_URL;
     try {
       setLoading(true);
 
-      const res = await fetch(`${API_BASE}/signup`, {
+      const res = await fetch(`https://yoursai-5.onrender.com/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password, name, phone }),
@@ -176,7 +176,7 @@ const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
   // ✅ Google Auth
   const signInWithGoogle = () => {
-    window.location.href = `${API_BASE}/auth/google`;
+    window.location.href = `https://yoursai-5.onrender.com/auth/google`;
   };
 
   // ✅ Logout
