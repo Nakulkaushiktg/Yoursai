@@ -1,0 +1,63 @@
+# Query: API_BASE
+# ContextLines: 1
+
+15 results - 7 files
+
+frontend\.env:
+  1: VITE_API_BASE_URL="https://yoursai-5.onrender.com"
+  2  
+
+frontend\src\components\ApplyModal.tsx:
+  48  
+  49:       const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/apply`, {
+  50          method: "POST",
+
+frontend\src\contexts\AuthContext.tsx:
+   49  
+   50:   const API_BASE =
+   51:     import.meta.env.VITE_API_BASE_URL || `${import.meta.env.VITE_API_BASE_URL}`;
+   52  
+
+   62        try {
+   63:         const res = await fetch(`${VITE_API_BASE_URL}/api/auth/user`, {
+   64            method: "GET",
+
+   87      fetchUser();
+   88:   }, [VITE_API_BASE_URL]);
+   89  
+
+   94  
+   95:       const res = await fetch(`${VITE_API_BASE_URL}/login`, {
+   96          method: "POST",
+
+  108        // ✅ Fetch user info using token
+  109:       const userRes = await fetch(`${VITE_API_BASE_URL}/api/auth/user`, {
+  110          headers: {
+
+  149  
+  150:       const res = await fetch(`${VITE_API_BASE_URL}/signup`, {
+  151          method: "POST",
+
+  178    const signInWithGoogle = () => {
+  179:     window.location.href = `${VITE_API_BASE_URL}/auth/google`;
+  180    };
+
+frontend\src\pages\Contact.tsx:
+  31        try {
+  32:         const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/contact`, {
+  33            method: "POST",
+
+frontend\src\pages\EarlyAccess.tsx:
+  35      // ✅ FIXED: Only send email and amount (in rupees if backend multiplies)
+  36:     const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/payment/create-order`, {
+  37        method: "POST",
+
+frontend\src\pages\FullDemo.tsx:
+  174  
+  175:       const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/fulldemo`, {
+  176          method: "POST",
+
+frontend\src\pages\ScheduleDemo.tsx:
+  50      try {
+  51:       const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/demo`, {
+  52          method: "POST",
