@@ -47,7 +47,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const { toast } = useToast();
   const navigate = useNavigate();
 
-  const API_BASE =
+  const VITE_API_BASE_URL =
     import.meta.env.VITE_API_BASE_URL || `${import.meta.env.VITE_API_BASE_URL}`;
 
   // ✅ Get user from token
@@ -85,7 +85,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     };
 
     fetchUser();
-  }, [API_BASE]);
+  }, [VITE_API_BASE_URL]);
 
   // ✅ Login
   const signIn = async (email: string, password: string) => {
