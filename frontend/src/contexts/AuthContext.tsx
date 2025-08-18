@@ -48,7 +48,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const navigate = useNavigate();
 
   const API_BASE =
-    import.meta.env.VITE_API_BASE_URL;
+    import.meta.env.VITE_API_BASE_URL || "https://yoursai-5.onrender.com";
 
   // ✅ Get user from token
   useEffect(() => {

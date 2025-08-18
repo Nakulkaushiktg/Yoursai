@@ -1,0 +1,37 @@
+# Query: /fotor-2025072217448.png
+# ContextLines: 1
+
+7 results - 5 files
+
+frontend\index.html:
+  10      <!-- ✅ Correct favicon path -->
+  11:     <link rel="icon" type="image/png" href="public/fotor-2025072217448.png" />
+  12  
+
+frontend\src\components\Footer.tsx:
+  31                <img 
+  32:                 src="//fotor-2025072217448.png" 
+  33                  alt="YoursAI Logo" 
+
+frontend\src\components\Navigation.tsx:
+  39              <img 
+  40:               src="//fotor-2025072217448.png" 
+  41                alt="YoursAI Logo" 
+
+frontend\src\pages\Auth.tsx:
+  61                <img 
+  62:                 src="//fotor-2025072217448.png" 
+  63                  alt="YoursAI Logo" 
+
+frontend\src\pages\Blog.tsx:
+  16        readTime: "5 min read",
+  17:       image: "//fotor-2025072217448.png"
+  18      },
+
+  24        readTime: "8 min read",
+  25:       image: "//fotor-2025072217448.png"
+  26      },
+
+  32        readTime: "6 min read",
+  33:       image: "//fotor-2025072217448.png"
+  34      }

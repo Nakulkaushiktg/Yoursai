@@ -46,7 +46,7 @@ export default function ApplyModal({ open, onClose, positionTitle }: ApplyModalP
       form.append("position", positionTitle);
       if (formData.resume) form.append("resume", formData.resume);
 
-      const res = await fetch("http://localhost:5000/api/apply"
+      const res = await fetch("https://yoursai-5.onrender.com/api/apply"
 , {
         method: "POST",
         body: form,

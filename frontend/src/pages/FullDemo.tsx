@@ -172,7 +172,7 @@ const FullDemo = () => {
         message: `Demo request from Full Demo page by ${firstName}`,
       };
 
-      const res = await fetch("http://localhost:5000/api/fulldemo", {
+      const res = await fetch("https://yoursai-5.onrender.com/api/fulldemo", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

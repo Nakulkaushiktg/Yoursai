@@ -48,7 +48,7 @@ const ScheduleDemo = () => {
     setIsSubmitting(true);
 
     try {
-      const res = await fetch("http://localhost:5000/api/demo", {
+      const res = await fetch("https://yoursai-5.onrender.com/api/demo", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
