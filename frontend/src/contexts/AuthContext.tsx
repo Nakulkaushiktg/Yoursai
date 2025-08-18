@@ -47,8 +47,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const { toast } = useToast();
   const navigate = useNavigate();
 
-  const VITE_API_BASE_URL =
-    import.meta.env.VITE_API_BASE_URL || `${import.meta.env.VITE_API_BASE_URL}`;
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
 
   // ✅ Get user from token
   useEffect(() => {
@@ -60,7 +60,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       }
 
       try {
-        const res = await fetch(`${VITE_API_BASE_URL}/api/auth/user`, {
+        const res = await fetch(`${API_BASE}/api/auth/user`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -85,14 +85,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     };
 
     fetchUser();
-  }, [VITE_API_BASE_URL]);
+  }, [API_BASE]);
 
   // ✅ Login
   const signIn = async (email: string, password: string) => {
     try {
       setLoading(true);
 
-      const res = await fetch(`${VITE_API_BASE_URL}/login`, {
+      const res = await fetch(`${API_BASE}/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -106,7 +106,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       localStorage.setItem("token", data.token);
 
       // ✅ Fetch user info using token
-      const userRes = await fetch(`${VITE_API_BASE_URL}/api/auth/user`, {
+      const userRes = await fetch(`${API_BASE}/api/auth/user`, {
         headers: {
           Authorization: `Bearer ${data.token}`,
         },
@@ -147,7 +147,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       setLoading(true);
 
-      const res = await fetch(`${VITE_API_BASE_URL}/signup`, {
+      const res = await fetch(`${API_BASE}/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password, name, phone }),
@@ -176,7 +176,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   // ✅ Google Auth
   const signInWithGoogle = () => {
-    window.location.href = `${VITE_API_BASE_URL}/auth/google`;
+    window.location.href = `${API_BASE}/auth/google`;
   };
 
   // ✅ Logout
