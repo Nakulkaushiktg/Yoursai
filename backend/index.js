@@ -4,7 +4,7 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { Pool } = require("pg");
+const { Pool } = require("pg"); // ✅ Single import
 const cookieParser = require("cookie-parser");
 const passport = require("passport");
 const session = require("express-session");
@@ -18,19 +18,57 @@ dotenv.config();
 const app = express();
 
 // -------------------- DATABASE --------------------
-// const pool = new Pool({
-//   user: process.env.PG_USER,
-//   host: process.env.PG_HOST,
-//   database: process.env.PG_DATABASE,
-//   password: process.env.PG_PASSWORD,
-//   port: process.env.PG_PORT,
-// });
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
 });
+
+// ✅ Test database connection
+const testConnection = async () => {
+  try {
+    const client = await pool.connect();
+    console.log('✅ Database connected successfully');
+    client.release();
+  } catch (err) {
+    console.error('❌ Database connection failed:', err);
+  }
+};
+
+// ✅ Initialize database tables
+const initDatabase = async () => {
+  try {
+    // Create users table
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS users (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(255),
+        email VARCHAR(255) UNIQUE NOT NULL,
+        password VARCHAR(255),
+        phone VARCHAR(20),
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
+    // Create payments table
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS payments (
+        id SERIAL PRIMARY KEY,
+        order_id VARCHAR(255) UNIQUE NOT NULL,
+        email VARCHAR(255),
+        amount DECIMAL(10,2),
+        status VARCHAR(50),
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
+    console.log('✅ Database tables initialized');
+  } catch (error) {
+    console.error('❌ Database initialization error:', error);
+  }
+};
+
 // -------------------- MAILER --------------------
-const transporter = nodemailer.createTransport({
+const transporter = nodemailer.createTransporter({
   service: "gmail",
   auth: {
     user: process.env.EMAIL,
@@ -66,6 +104,13 @@ const razorpay = new Razorpay({
 app.post("/api/payment/create-order", async (req, res) => {
   try {
     const { email, amount } = req.body;
+
+    if (!email || !amount) {
+      return res.status(400).json({
+        success: false,
+        message: "Email and amount are required"
+      });
+    }
 
     const order = await razorpay.orders.create({
       amount: amount * 100,
@@ -282,6 +327,7 @@ passport.use(
 
         done(null, user);
       } catch (err) {
+        console.error("Google OAuth error:", err);
         done(err, null);
       }
     }
@@ -301,25 +347,74 @@ passport.deserializeUser(async (email, done) => {
 });
 
 // -------------------- AUTH ROUTES --------------------
+// ✅ Fixed signup route with better error handling
 app.post("/signup", async (req, res) => {
+  console.log("🔄 Signup request received:", { email: req.body.email, name: req.body.name });
+  
   const { name, email, password, phone = null } = req.body;
+  
   try {
-    const exists = await pool.query("SELECT * FROM users WHERE email = $1", [
-      email,
-    ]);
-    if (exists.rows.length > 0) {
-      return res.status(400).json({ message: "Email already registered" });
+    // Input validation
+    if (!name || !email || !password) {
+      console.log("❌ Missing required fields");
+      return res.status(400).json({ 
+        message: "Name, email, and password are required",
+        success: false 
+      });
     }
 
+    // Email format validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ 
+        message: "Invalid email format",
+        success: false 
+      });
+    }
+
+    // Check if user exists
+    console.log("🔍 Checking if user exists...");
+    const exists = await pool.query("SELECT * FROM users WHERE email = $1", [email]);
+    
+    if (exists.rows.length > 0) {
+      console.log("❌ User already exists");
+      return res.status(409).json({ 
+        message: "Email already registered",
+        success: false 
+      });
+    }
+
+    // Hash password
+    console.log("🔒 Hashing password...");
     const hash = await bcrypt.hash(password, 10);
-    await pool.query(
-      "INSERT INTO users (name, email, password, phone) VALUES ($1, $2, $3, $4)",
+    
+    // Insert user
+    console.log("💾 Inserting user into database...");
+    const result = await pool.query(
+      "INSERT INTO users (name, email, password, phone) VALUES ($1, $2, $3, $4) RETURNING id, name, email",
       [name, email, hash, phone]
     );
-    res.status(201).json({ message: "Signup successful" });
+
+    console.log("✅ User created successfully:", result.rows[0]);
+    res.status(201).json({ 
+      message: "Signup successful",
+      success: true,
+      user: { id: result.rows[0].id, name: result.rows[0].name, email: result.rows[0].email }
+    });
+    
   } catch (err) {
-    console.error("Signup error:", err);
-    res.status(500).json({ message: "Signup failed" });
+    console.error("❌ Signup error:", err);
+    console.error("Error details:", {
+      message: err.message,
+      code: err.code,
+      detail: err.detail
+    });
+    
+    res.status(500).json({ 
+      message: "Signup failed", 
+      success: false,
+      error: process.env.NODE_ENV === 'development' ? err.message : undefined
+    });
   }
 });
 
@@ -401,6 +496,15 @@ app.get(
 app.get("/", (req, res) => res.send("✅ Auth Backend Working"));
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () =>
-  console.log(`🚀 Auth server running at http://localhost:${PORT}`)
-);
+
+// ✅ Initialize database and start server
+const startServer = async () => {
+  await testConnection();
+  await initDatabase();
+  
+  app.listen(PORT, () => {
+    console.log(`🚀 Auth server running at http://localhost:${PORT}`);
+  });
+};
+
+startServer();
